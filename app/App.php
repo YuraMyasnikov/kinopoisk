@@ -10,7 +10,7 @@ class App
     {
         //значение после доменного имени
         $uri = $_SERVER['REQUEST_URI'];
-        //значение метод входа
+        //значение метода при входе на страницу
         $method = $_SERVER['REQUEST_METHOD'];
 
         $router = new Router();
