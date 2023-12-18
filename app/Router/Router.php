@@ -14,7 +14,7 @@ class Router
     public function despatch(string $uri, string $method): void //[en] despatch - [ru] отправка
     {
         $web = $this->findWeb($uri, $method);
-        if (! $web) {
+        if (! $web ) {
             $this->notFound();
         }
 
