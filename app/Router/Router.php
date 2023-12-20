@@ -11,7 +11,7 @@ class Router
     }
 
     //$uri - значение после доменного имени
-    public function despatch(string $uri, string $method): void //[en] despatch - [ru] отправка
+    public function dispatch(string $uri, string $method): void //[en] dispatch - [ru] диспетчер
     {
         $web = $this->findWeb($uri, $method);
         if (! $web ) {

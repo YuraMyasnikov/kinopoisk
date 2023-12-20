@@ -2,20 +2,23 @@
 
 namespace App;
 
+use App\Http\Request;
 use App\Router\Router;
+
 
 class App
 {
     public function run(): void
     {
+        //получение массив всего реквеста
+        $request = Request::findGlobal();
         //значение после доменного имени
-        $uri = $_SERVER['REQUEST_URI'];
+        $uri = $request->uri();
         //значение метода при входе на страницу
-        $method = $_SERVER['REQUEST_METHOD'];
+        $method = $request->method();
 
         $router = new Router();
-
         //метод обработки маршрута
-        $router->despatch($uri, $method);
+        $router->dispatch($uri, $method);
     }
 }
