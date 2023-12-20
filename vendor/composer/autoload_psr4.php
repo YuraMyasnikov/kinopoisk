@@ -10,5 +10,6 @@ return array(
     'Symfony\\Component\\VarDumper\\' => array($vendorDir . '/symfony/var-dumper'),
     'Database\\Seeders\\' => array($vendorDir . '/laravel/pint/database/seeders'),
     'Database\\Factories\\' => array($vendorDir . '/laravel/pint/database/factories'),
+    'App\\Kernel\\' => array($baseDir . '/kernel'),
     'App\\' => array($baseDir . '/app', $vendorDir . '/laravel/pint/app'),
 );
