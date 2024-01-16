@@ -1,3 +1,4 @@
+
 <?php
 
 define('MAIN_PATH', dirname(__DIR__));

@@ -2,7 +2,7 @@
 
 namespace App\Http;
 
-class Request
+class Request // Запрашивает (строка браузера)
 {
     public readonly array $get;
     public readonly array $post;
@@ -26,7 +26,7 @@ class Request
         $this->cookie = $cookie;
     }
 
-    static public function findGlobal(): static
+    static public function findGlobal(): static // возвращает глобальные массивы
     {
         return new static($_GET,$_POST,$_SERVER,$_FILES,$_COOKIE);
     }
@@ -34,7 +34,7 @@ class Request
     //получения get-запроса без параметров
     public function uri(): string
     {
-        return strtok($this->server['REQUEST_URI'],'?');
+        return strtok($this->server['REQUEST_URI'],'?'); // отрезает у строки все начиная с "?"
     }
     //получение метода входа на страницу
     public function method(): string

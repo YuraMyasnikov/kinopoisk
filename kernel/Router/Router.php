@@ -2,45 +2,50 @@
 
 namespace App\Kernel\Router;
 
+use App\Kernel\Controller\Controller;
+use App\Kernel\View\View;
+
 class Router
 {
-    public function __construct()
+    public function __construct(private View $view)
     {
-        //по умолчанию раскидываю роуты в массив с методами
-        $this->initWebs();
+        $this->initWebs(); // раскидываю каждый полученный роут в массив WEBS
     }
 
-    //$uri - значение после доменного имени
-    public function dispatch(string $uri, string $method): void //[en] dispatch - [ru] диспетчер
+    //$uri - значение страницы на которой находишься
+    //$method - значение метода попадания на страницу
+    public function dispatch(string $uri, string $method): void
+    //метод dispatch нужен для того чтобы определить контроллер и какой у него метод вызвать
     {
         $web = $this->findWeb($uri, $method);
         if (! $web ) {
             $this->notFound();
         }
 
-        if (is_array($web->getAction()))
+        ;
+        if (is_array($web->getAction()))// проверяю action в route(getAction) (с web.php) передан в виде массива
         {
 
             //$controller = $web->getAction()[0];
-            [$controller, $action] = $web->getAction();
-            $controller = new $controller();
-            $controller->$action();
+            /** @var Controller $controller */
+            [$controller, $action] = $web->getAction(); //переопределяю на путь до контроллера и на метод в контроллере
+            $controller = new $controller(); //создал контроллер, все контроллеры наследуют от абстрактного контроллера
+            $controller->setView($this->view); //
+            //call_user_func([$controller,'setView'],$this->view);
+            call_user_func([$controller,$action]);
         }
         else{
             //$web->getAction()();
             call_user_func($web->getAction());
         }
-
-
     }
 
-    //получаю массив моих роутов
-    private function getWebs(): array
+    private function getWebs(): array // с массива получаю список роутов
     {
         return require MAIN_PATH.'/config/web.php';
     }
 
-    //формированые по методам роуты
+
     private array $webs = [
         'GET' => [],
         'POST' => [],
@@ -49,10 +54,10 @@ class Router
     //раскидываю роуты по их методу и помещаю в массив с возможными методами👆
     private function initWebs(): void
     {
-        $webs = $this->getWebs();
+        $webs = $this->getWebs(); //
         foreach ($webs as $web) {
             /** @var $web Route */
-            $this->webs[$web->getMethod()][$web->getUri()] = $web;
+            $this->webs[$web->getMethod()][$web->getUri()] = $web; //закидываю в массив WEBS каждый роут(web.php) в свой method
         }
     }
 
