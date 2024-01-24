@@ -2,14 +2,20 @@
 
 namespace App\Kernel\Router;
 
+use App\Http\Request;
 use App\Kernel\Controller\Controller;
 use App\Kernel\View\View;
 
 class Router
 {
-    public function __construct(private View $view)
+    public function __construct(
+        private View $view,
+        private Request $request
+    )
     {
+
         $this->initWebs(); // раскидываю каждый полученный роут в массив WEBS
+
     }
 
     //$uri - значение страницы на которой находишься
@@ -30,9 +36,14 @@ class Router
             /** @var Controller $controller */
             [$controller, $action] = $web->getAction(); //переопределяю на путь до контроллера и на метод в контроллере
             $controller = new $controller(); //создал контроллер, все контроллеры наследуют от абстрактного контроллера
+
             $controller->setView($this->view); //
-            //call_user_func([$controller,'setView'],$this->view);
+            $controller->setRequest($this->request);
+
+            /* call_user_func([$controller,'setView'],$this->view);*/
             call_user_func([$controller,$action]);
+
+
         }
         else{
             //$web->getAction()();
@@ -51,6 +62,7 @@ class Router
         'POST' => [],
     ];
 
+
     //раскидываю роуты по их методу и помещаю в массив с возможными методами👆
     private function initWebs(): void
     {
@@ -65,11 +77,12 @@ class Router
     private function findWeb(string $uri, string $method): Route|false
     {
         //проверка существования такой страницы и метод
-        if (! isset($this->webs[$method][$uri])) {
+        if (! isset($this->webs[$method][$uri])) { // страница не существует
             return false;
         }
         //возвращаю страницу с таким методом
         return $this->webs[$method][$uri];
+
     }
 
     private function notFound(): void

@@ -1,5 +1,5 @@
-<?php /** @var \App\Kernel\View\View $view */
+<?php /** @var \App\Kernel\View\View $view */?>
 
-$view->component('start'); ?>
-<h1> Home page! </h1>
-<?php $view->component('end') ?>
+<?php include MAIN_PATH . '/view/components/start.php'?>
+    <h1 class="notArr"> Home page! </h1>
+<?php include MAIN_PATH . '/view/components/end.php'?>

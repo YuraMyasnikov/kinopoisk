@@ -7,5 +7,3 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/assets/css/style.css">
     <title>Document</title>
-</head>
-<body>

@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Kernel\Validator\Validator;
+
 class Request // Запрашивает (строка браузера)
 {
     public readonly array $get;
@@ -9,6 +11,8 @@ class Request // Запрашивает (строка браузера)
     public readonly array $server;
     public readonly array $files;
     public readonly array $cookie;
+
+    private Validator $validator;
 
     /**
      * @param array $get
@@ -42,6 +46,33 @@ class Request // Запрашивает (строка браузера)
         return $this->server['REQUEST_METHOD'];
     }
 
+    public function input(string $key, $default = null): mixed //
+    {
+        return $this->post[$key] ?? $this->get[$key] ?? $default;
+    }
+
+    public function validate(array $rules): bool //['name_movie' => ['require', 'min:3', 'max:10']]
+    {
+        $data = [];
+
+        foreach ($rules as $key => $rule) // as 'name_movie' => ['require', 'min:3', 'max:10']
+        {
+
+                $data[$key] = $this->input($key);
+        }
+        return $this->validator->validate($data, $rules);
+    }
+
+
+    public function setValidator(Validator $validator): void
+    {
+        $this->validator = $validator;
+    }
+
+    public function errors(): array
+    {
+        return $this->validator->errors();
+    }
 
 
 }
