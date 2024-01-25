@@ -2,19 +2,19 @@
 
 namespace App\Kernel\Router;
 
-use App\Http\Redirect;
-use App\Http\Request;
+use App\Http\RedirectInterface;
+use App\Http\RequestInterface;
 use App\Kernel\Controller\Controller;
-use App\Kernel\Session\Session;
-use App\Kernel\View\View;
+use App\Kernel\Session\SessionInterface;
+use App\Kernel\View\ViewInterface;
 
-class Router
+class Router implements RouterInterface
 {
     public function __construct(
-        private View $view,
-        private Request $request,
-        private Redirect $redirect,
-        private Session $session,
+        private ViewInterface $view,
+        private RequestInterface $request,
+        private RedirectInterface $redirect,
+        private SessionInterface $session,
     )
     {
 

@@ -14,6 +14,7 @@ class Container // инициализация классов из services от�
 
     public readonly Request $request;
     public readonly Router $router;
+
     public readonly View $view;
     public readonly Validator $validator;
     public readonly Redirect $redirect;

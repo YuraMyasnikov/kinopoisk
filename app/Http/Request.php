@@ -2,18 +2,17 @@
 
 namespace App\Http;
 
+use App\Kernel\Validator\ValadatorInterface;
 use App\Kernel\Validator\Validator;
 
-class Request // Запрашивает (строка браузера)
+class Request implements RequestInterface// Запрашивает (строка браузера)
 {
     public readonly array $get;
     public readonly array $post;
     public readonly array $server;
     public readonly array $files;
     public readonly array $cookie;
-
-    private Validator $validator;
-
+    private ValadatorInterface $validator;
 
     /**
      * @param array $get
@@ -63,8 +62,7 @@ class Request // Запрашивает (строка браузера)
         return $this->validator->validate($data, $rules);
     }
 
-
-    public function setValidator(Validator $validator): void
+    public function setValidator(ValadatorInterface $validator): void
     {
         $this->validator = $validator;
     }
@@ -73,6 +71,4 @@ class Request // Запрашивает (строка браузера)
     {
         return $this->validator->errors();
     }
-
-
 }

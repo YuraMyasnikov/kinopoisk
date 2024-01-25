@@ -2,7 +2,7 @@
 
 namespace App\Kernel\Validator;
 
-class Validator
+class Validator implements ValadatorInterface
 {
     private array $errors = [];
     private array $data;
@@ -48,7 +48,7 @@ class Validator
 
         switch ($ruleName){ // проверка валидации
             case 'required':
-                if(! $value)
+                if(empty($value))
                 {
                     return "Поле $key обязательно";
                 }
