@@ -2,7 +2,9 @@
 
 namespace App\Kernel\Controller;
 
+use App\Http\Redirect;
 use App\Http\Request;
+use App\Kernel\Session\Session;
 use App\Kernel\View\View;
 
 abstract class Controller // им наследуют остальные контроллеры (батя)
@@ -10,6 +12,9 @@ abstract class Controller // им наследуют остальные конт
 
     private View $view;
     private Request $request;
+    private  Redirect $redirect;
+    private  Session $session;
+
 
     public function request(): Request
     {
@@ -32,5 +37,23 @@ abstract class Controller // им наследуют остальные конт
         $this->view = $view;
     }
 
+    public function setRedirect(Redirect $redirect): void
+    {
+        $this->redirect = $redirect;
+    }
 
+    public function redirect(string $uri): void
+    {
+         $this->redirect->to($uri);
+    }
+
+    public function session(): Session
+    {
+        return $this->session;
+    }
+
+    public function setSession(Session $session): void
+    {
+        $this->session = $session;
+    }
 }

@@ -14,6 +14,7 @@ class Request // Запрашивает (строка браузера)
 
     private Validator $validator;
 
+
     /**
      * @param array $get
      * @param array $post
@@ -57,7 +58,6 @@ class Request // Запрашивает (строка браузера)
 
         foreach ($rules as $key => $rule) // as 'name_movie' => ['require', 'min:3', 'max:10']
         {
-
                 $data[$key] = $this->input($key);
         }
         return $this->validator->validate($data, $rules);

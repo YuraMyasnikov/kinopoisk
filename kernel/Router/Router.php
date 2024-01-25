@@ -2,15 +2,19 @@
 
 namespace App\Kernel\Router;
 
+use App\Http\Redirect;
 use App\Http\Request;
 use App\Kernel\Controller\Controller;
+use App\Kernel\Session\Session;
 use App\Kernel\View\View;
 
 class Router
 {
     public function __construct(
         private View $view,
-        private Request $request
+        private Request $request,
+        private Redirect $redirect,
+        private Session $session,
     )
     {
 
@@ -39,11 +43,11 @@ class Router
 
             $controller->setView($this->view); //
             $controller->setRequest($this->request);
+            $controller->setRedirect($this->redirect);
+            $controller->setSession($this->session);
 
             /* call_user_func([$controller,'setView'],$this->view);*/
             call_user_func([$controller,$action]);
-
-
         }
         else{
             //$web->getAction()();

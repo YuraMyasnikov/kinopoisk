@@ -5,9 +5,17 @@ namespace App\Kernel\View;
 
 
 use App\Kernel\Exections\ViewNotFoundExection;
+use App\Kernel\Session\Session;
 
 class View
 {
+    public function __construct(
+        private Session $session
+    )
+    {
+
+    }
+
     public function page ($name): void
     {
         $viewPath = MAIN_PATH . "/view/pages/$name.php";
@@ -17,9 +25,7 @@ class View
             throw new ViewNotFoundExection("Братан такой страницы \"$name\" не существует "); //ошибка на случай если с контроллера отправка на несуществующую страницу
         }
 
-        extract(array: [
-            "view" => $this
-        ]);
+        extract(array: $this->defaultData()); // передаю в вьюху объекты классов
 
         include_once $viewPath;
     }
@@ -35,5 +41,13 @@ class View
         }
 
         include_once $filePath;
+    }
+
+    private function defaultData(): array
+    {
+        return [
+            "view" => $this,
+            'session' => $this->session,
+        ];
     }
 }

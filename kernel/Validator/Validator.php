@@ -16,9 +16,9 @@ class Validator
         {
             $rules = $rule;
 
-
             foreach ($rules as $rule) // [rule, rule, rule...]
             {
+
                 $rule = explode(':', $rule); //получаю значение каждого правила
                 $ruleName = $rule[0]; //название (require, min,max....)
                 $ruleValue = $rule[1] ?? null; //значение допустимости, (если не определено = null) - [null, 3,10]
@@ -48,7 +48,7 @@ class Validator
 
         switch ($ruleName){ // проверка валидации
             case 'required':
-                if(empty($value))
+                if(! $value)
                 {
                     return "Поле $key обязательно";
                 }
