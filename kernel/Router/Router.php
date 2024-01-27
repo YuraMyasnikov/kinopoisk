@@ -5,6 +5,7 @@ namespace App\Kernel\Router;
 use App\Http\RedirectInterface;
 use App\Http\RequestInterface;
 use App\Kernel\Controller\Controller;
+use App\Kernel\DataBase\DataBaseInterface;
 use App\Kernel\Session\SessionInterface;
 use App\Kernel\View\ViewInterface;
 
@@ -15,6 +16,7 @@ class Router implements RouterInterface
         private RequestInterface $request,
         private RedirectInterface $redirect,
         private SessionInterface $session,
+        private DataBaseInterface $dataBase,
     )
     {
 
@@ -41,12 +43,13 @@ class Router implements RouterInterface
             [$controller, $action] = $web->getAction(); //переопределяю на путь до контроллера и на метод в контроллере
             $controller = new $controller(); //создал контроллер, все контроллеры наследуют от абстрактного контроллера
 
+            /* call_user_func([$controller,'setView'],$this->view);*/
             $controller->setView($this->view); //
             $controller->setRequest($this->request);
             $controller->setRedirect($this->redirect);
             $controller->setSession($this->session);
+            $controller->setDataBase($this->dataBase);
 
-            /* call_user_func([$controller,'setView'],$this->view);*/
             call_user_func([$controller,$action]);
         }
         else{

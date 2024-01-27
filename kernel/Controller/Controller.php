@@ -3,17 +3,23 @@
 namespace App\Kernel\Controller;
 
 use App\Http\Redirect;
+use App\Http\RedirectInterface;
 use App\Http\Request;
+use App\Http\RequestInterface;
+use App\Kernel\DataBase\DataBaseInterface;
 use App\Kernel\Session\Session;
+use App\Kernel\Session\SessionInterface;
 use App\Kernel\View\View;
+use App\Kernel\View\ViewInterface;
 
 abstract class Controller // им наследуют остальные контроллеры (батя)
 {
 
-    private View $view;
-    private Request $request;
-    private  Redirect $redirect;
-    private  Session $session;
+    private ViewInterface $view;
+    private RequestInterface $request;
+    private  RedirectInterface $redirect;
+    private  SessionInterface $session;
+    private  DataBaseInterface $dataBase;
 
 
     public function request(): Request
@@ -55,5 +61,15 @@ abstract class Controller // им наследуют остальные конт
     public function setSession(Session $session): void
     {
         $this->session = $session;
+    }
+
+    public function db(): DataBaseInterface
+    {
+        return $this->dataBase;
+    }
+
+    public function setDataBase(DataBaseInterface $dataBase): void
+    {
+        $this->dataBase = $dataBase;
     }
 }

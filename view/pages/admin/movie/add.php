@@ -4,12 +4,12 @@
 <?php $view->component('start');?>
 <h1>Добавление фильма</h1>
 <form action="/admin/movie/add" method="post">
-    <label for="name_movie">Название фильма</label>
-    <div><input name="name_movie" type="text"></div>
-    <?php if ($session->has('name_movie')){ ?>
+    <label for="name">Название фильма</label>
+    <div><input name="name" type="text"></div>
+    <?php if ($session->has('name')){ ?>
     <div>
         <ul>
-            <?php foreach ($session->getFlash('name_movie') as $error){?>
+            <?php foreach ($session->getFlash('name') as $error){?>
             <li style="color: red"><?= $error ?></li>
             <?php }?>
         </ul>

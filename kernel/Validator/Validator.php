@@ -23,8 +23,8 @@ class Validator implements ValadatorInterface
                 $ruleName = $rule[0]; //название (require, min,max....)
                 $ruleValue = $rule[1] ?? null; //значение допустимости, (если не определено = null) - [null, 3,10]
 
-
                 $error = $this->validateRules($key, $ruleName, $ruleValue); //
+
 
                 if($error)
                 {

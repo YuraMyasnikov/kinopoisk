@@ -11,7 +11,7 @@ class MovieController extends Controller
         $this->view('movies');
     }
 
-    public function addFormView(): void //отображение страны с формой
+    public function addFormView(): void
     {
         $this->view('admin/movie/add');
     }
@@ -19,12 +19,11 @@ class MovieController extends Controller
     {
 
        $validations = $this->request()->validate([
-           'name_movie' => ['require', 'min:3', 'max:10'] // !!!!! НЕ ОТОБРАЖАЕТ REQUIRE ШО ЗА ХУЙНЯ НЕ ПОНЯЛ
+           'name' => ['required', 'min:3', 'max:10']
        ]);
 
        if (! $validations)
        {
-
            foreach ($this->request()->errors() as $nameInput => $error)
            {
                $this->session()->set($nameInput,$error);
@@ -33,8 +32,11 @@ class MovieController extends Controller
            $this->redirect('/admin/movie/add');
        }
 
-        /*dd('ok bratok');*/
-        $this->redirect('/admin/movie/add');
+            $id = $this->db()->insert('movies',[
+                'name' => $this->request()->input('name')
+                ]);
 
+            $this->redirect('/admin/movie/add');
     }
+
 }
