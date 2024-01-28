@@ -7,24 +7,26 @@ class Validator implements ValadatorInterface
     private array $errors = [];
     private array $data;
 
-    public function validate(array $data, array $rules): bool
+    public function validate(array $data, array $rules): bool  //(array ['name' => 'yura'], array [0=>'required'])
     {
+
         $this->errors = []; // обнуляю массив ошибок
         $this->data = $data; //array [names for input]
 
-        foreach ($rules as $key => $rule) // name_movie => [...]
+
+        foreach ($rules as $key => $rule) //$rules =  ['name' => [0 => 'required, 1 => 'min:3']]
         {
             $rules = $rule;
 
-            foreach ($rules as $rule) // [rule, rule, rule...]
+            foreach ($rules as $rule) // $rules = [0 => 'required, 1 => 'min:3']]
             {
 
                 $rule = explode(':', $rule); //получаю значение каждого правила
+
                 $ruleName = $rule[0]; //название (require, min,max....)
                 $ruleValue = $rule[1] ?? null; //значение допустимости, (если не определено = null) - [null, 3,10]
 
-                $error = $this->validateRules($key, $ruleName, $ruleValue); //
-
+                $error = $this->validateRules($key, $ruleName, $ruleValue); // ('name', required, null) далее следующие правила
 
                 if($error)
                 {
@@ -47,6 +49,12 @@ class Validator implements ValadatorInterface
         $value = $this->data[$key];  //value - название фильма . data - массив фильма  key - значение
 
         switch ($ruleName){ // проверка валидации
+            case 'email':
+                if ($value > strlen($value)){
+                    if (! filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        return "Поле $key со значением $value не является почтой";
+                    }
+                }break;
             case 'required':
                 if(empty($value))
                 {
@@ -63,7 +71,8 @@ class Validator implements ValadatorInterface
                 if(strlen($value) > $ruleValue)
                 {
                     return "Сократи значение в поле $key. Вместительность - $ruleValue символов. У тебя ($value) ". strlen($value) . "символа ";
-                }
+                }break;
+
         }
         return false;
     }
