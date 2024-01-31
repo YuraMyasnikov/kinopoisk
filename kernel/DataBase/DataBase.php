@@ -43,6 +43,32 @@ class DataBase implements DataBaseInterface
         return (int) $this->pdo->lastInsertId();
 
     }
+
+    public function first(string $table, array $conditions = []): ?array
+    {
+        $where = '';
+
+        if( ! empty($conditions) ) {
+            $where = "WHERE " . implode(' AND ',
+                    array_map(
+                        fn($field) => "$field = :$field", //возвращает каждый ключ массива ($conditions) в формате (к примеру) "name = :name"
+                        array_keys($conditions) // получаю массив только ключей из массива переданого в саму функцию first
+                        )
+                    );
+            //получаю (примерно такое) "Where name = :name AND age = :age AND city = :city"
+        }
+
+        $sql = "SELECT * FROM $table $where LIMIT 1";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute($conditions);
+        $result = $stmt->fetch(mode: \PDO::FETCH_ASSOC);
+
+        return $result ?: null;
+
+    }
+
     private function connect() // получаю данные со стороннего файла и настраиваю подключение с бд
     {
 

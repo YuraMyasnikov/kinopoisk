@@ -4,8 +4,11 @@ namespace App\Kernel\Router;
 
 use App\Http\RedirectInterface;
 use App\Http\RequestInterface;
+use App\Kernel\Auth\AuthInterface;
+use App\Kernel\Config\ConfigInterface;
 use App\Kernel\Controller\Controller;
 use App\Kernel\DataBase\DataBaseInterface;
+use App\Kernel\Log\Log;
 use App\Kernel\Session\SessionInterface;
 use App\Kernel\View\ViewInterface;
 
@@ -17,6 +20,7 @@ class Router implements RouterInterface
         private RedirectInterface $redirect,
         private SessionInterface $session,
         private DataBaseInterface $dataBase,
+        private AuthInterface $auth,
     )
     {
 
@@ -34,13 +38,11 @@ class Router implements RouterInterface
             $this->notFound();
         }
 
-        ;
         if (is_array($web->getAction()))// проверяю action в route(getAction) (с web.php) передан в виде массива
         {
-
             //$controller = $web->getAction()[0];
             /** @var Controller $controller */
-            [$controller, $action] = $web->getAction(); //переопределяю на путь до контроллера и на метод в контроллере
+            [$controller, $action] = $web->getAction();//переопределяю на путь до контроллера и на метод в контроллере
             $controller = new $controller(); //создал контроллер, все контроллеры наследуют от абстрактного контроллера
 
             /* call_user_func([$controller,'setView'],$this->view);*/
@@ -49,6 +51,7 @@ class Router implements RouterInterface
             $controller->setRedirect($this->redirect);
             $controller->setSession($this->session);
             $controller->setDataBase($this->dataBase);
+            $controller->setAuth($this->auth);
 
             call_user_func([$controller,$action]);
         }

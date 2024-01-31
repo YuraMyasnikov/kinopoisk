@@ -4,6 +4,7 @@ namespace App\Kernel\View;
 
 
 
+use App\Kernel\Auth\AuthInterface;
 use App\Kernel\Exections\ViewNotFoundExection;
 use App\Kernel\Session\Session;
 use App\Kernel\Session\SessionInterface;
@@ -11,7 +12,8 @@ use App\Kernel\Session\SessionInterface;
 class View implements ViewInterface
 {
     public function __construct(
-        private SessionInterface $session
+        private SessionInterface $session,
+        private AuthInterface $auth
     ){}
 
     public function page ($name): void
@@ -38,6 +40,8 @@ class View implements ViewInterface
             return;
         }
 
+        extract(array: $this->defaultData()); // передаю в вьюху объекты классов
+
         include_once $filePath;
     }
 
@@ -46,6 +50,7 @@ class View implements ViewInterface
         return [
             "view" => $this,
             'session' => $this->session,
+            'auth' => $this->auth,
         ];
     }
 }

@@ -2,7 +2,7 @@
 <?php /** @var \App\Kernel\Session\SessionInterface $session */?>
 <?php include MAIN_PATH . '/view/components/start.php'?>
 
-    <h1 class="notArr"> Регистрация! </h1>
+    <h1> Регистрация! </h1>
 
 <div style="display:flex; justify-content:center" />
     <form action="/register" method="post" style="width: 30%;">
