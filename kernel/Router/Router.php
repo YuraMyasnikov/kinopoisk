@@ -8,9 +8,11 @@ use App\Kernel\Auth\AuthInterface;
 use App\Kernel\Config\ConfigInterface;
 use App\Kernel\Controller\Controller;
 use App\Kernel\DataBase\DataBaseInterface;
-use App\Kernel\Log\Log;
+use App\Kernel\Miidleware\AbstractMiddleware;
 use App\Kernel\Session\SessionInterface;
 use App\Kernel\View\ViewInterface;
+
+
 
 class Router implements RouterInterface
 {
@@ -21,6 +23,7 @@ class Router implements RouterInterface
         private SessionInterface $session,
         private DataBaseInterface $dataBase,
         private AuthInterface $auth,
+
     )
     {
 
@@ -33,16 +36,29 @@ class Router implements RouterInterface
     public function dispatch(string $uri, string $method): void
     //метод dispatch нужен для того чтобы определить контроллер и какой у него метод вызвать
     {
-        $web = $this->findWeb($uri, $method);
-        if (! $web ) {
+        $route = $this->findWeb($uri, $method);
+        if (! $route ) {
             $this->notFound();
         }
 
-        if (is_array($web->getAction()))// проверяю action в route(getAction) (с web.php) передан в виде массива
+
+        if ($route->hasMiddlewares())
+        {
+            foreach ($route->getMiddlewares() as $middleware)
+            {
+                /** @var AbstractMiddleware $middleware */
+                $middleware = new $middleware($this->request, $this->auth, $this->redirect);
+
+
+                $middleware->handle();
+            }
+        }
+
+        if (is_array($route->getAction()))// проверяю action в route(getAction) (с web.php) передан в виде массива
         {
             //$controller = $web->getAction()[0];
             /** @var Controller $controller */
-            [$controller, $action] = $web->getAction();//переопределяю на путь до контроллера и на метод в контроллере
+            [$controller, $action] = $route->getAction();//переопределяю на путь до контроллера и на метод в контроллере
             $controller = new $controller(); //создал контроллер, все контроллеры наследуют от абстрактного контроллера
 
             /* call_user_func([$controller,'setView'],$this->view);*/
@@ -57,7 +73,7 @@ class Router implements RouterInterface
         }
         else{
             //$web->getAction()();
-            call_user_func($web->getAction());
+            call_user_func($route->getAction());
         }
     }
 
