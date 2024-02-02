@@ -8,3 +8,8 @@ h1.notArr{
     display: flex;
     flex-direction: column;
 }
+
+.paddy{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

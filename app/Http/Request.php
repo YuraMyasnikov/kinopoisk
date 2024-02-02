@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Kernel\Upload\UploadedFile;
+use App\Kernel\Upload\UploadedFileInterface;
 use App\Kernel\Validator\ValadatorInterface;
 use App\Kernel\Validator\Validator;
 
@@ -12,6 +14,7 @@ class Request implements RequestInterface// Запрашивает (строка
     public readonly array $server;
     public readonly array $files;
     public readonly array $cookie;
+
     private ValadatorInterface $validator;
 
     /**
@@ -21,7 +24,7 @@ class Request implements RequestInterface// Запрашивает (строка
      * @param array $files
      * @param array $cookie
      */
-    public function __construct(array $get, array $post, array $server, array $files, array $cookie)
+    public function __construct(array $get, array $post, array $server, array $files, array $cookie,)
     {
         $this->get = $get;
         $this->post = $post;
@@ -62,6 +65,22 @@ class Request implements RequestInterface// Запрашивает (строка
         return $this->validator->validate($data, $rules);
     }
 
+    public function file(string $key): ?UploadedFileInterface
+    {
+        if (! isset($this->files[$key]) )
+        {
+            return null;
+        }
+
+        return new UploadedFile(
+            $this->files[$key]['name'],
+            $this->files[$key]['type'],
+            $this->files[$key]['size'],
+            $this->files[$key]['error'],
+            $this->files[$key]['tmp_name'],
+        );
+    }
+
     public function setValidator(ValadatorInterface $validator): void
     {
         $this->validator = $validator;
@@ -71,4 +90,5 @@ class Request implements RequestInterface// Запрашивает (строка
     {
         return $this->validator->errors();
     }
+
 }

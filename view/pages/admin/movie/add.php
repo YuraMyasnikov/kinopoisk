@@ -4,9 +4,9 @@
 <?php $view->component('start');?>
 
 <h1>Добавление фильма</h1>
-<form action="/admin/movie/add" method="post">
+<form action="/admin/movie/add" method="post" enctype="multipart/form-data">
     <label for="name">Название фильма</label>
-    <div><input name="name" type="text"></div>
+    <div class="paddy"><input name="name" type="text"></div>
 
     <!-- проверяю есть ли в сессии ошибка с таким названием name -->
     <?php if ($session->has('name')){ ?>
@@ -19,7 +19,12 @@
         </ul>
     </div>
     <?php } ?>
-    <div><button type="submit"> Добавить</button></div>
+
+    <div class="paddy">
+        <input type="file" name="image">
+    </div>
+
+    <div class="paddy"><button type="submit"> Добавить</button></div>
 </form>
 <?php $view->component('end');?>
 
