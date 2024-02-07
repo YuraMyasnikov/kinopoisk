@@ -13,6 +13,8 @@ use App\Kernel\DataBase\DataBaseInterface;
 use App\Kernel\Log\Log;
 use App\Kernel\Session\Session;
 use App\Kernel\Session\SessionInterface;
+use App\Kernel\Storage\Storage;
+use App\Kernel\Storage\StorageInterface;
 use App\Kernel\View\View;
 use App\Kernel\View\ViewInterface;
 
@@ -26,6 +28,8 @@ abstract class Controller // им наследуют остальные конт
     private  DataBaseInterface $dataBase;
     private AuthInterface $auth;
     private ConfigInterface $config;
+    private StorageInterface $storage;
+
 
 
     public function request(): Request
@@ -38,9 +42,9 @@ abstract class Controller // им наследуют остальные конт
         $this->request = $request;
     }
 
-    public function view(string $name): void
+    public function view(string $name, array $data = []): void
     {
-        $this->view->page($name);
+        $this->view->page($name, $data);
 
     }
 
@@ -99,6 +103,13 @@ abstract class Controller // им наследуют остальные конт
         $this->config = $config;
     }
 
-
+    public function storage(): StorageInterface
+    {
+        return $this->storage;
+    }
+    public function setStorage(StorageInterface $storage): void
+    {
+        $this->storage = $storage;
+    }
 
 }

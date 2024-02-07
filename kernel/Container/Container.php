@@ -17,6 +17,8 @@ use App\Kernel\Router\Router;
 use App\Kernel\Router\RouterInterface;
 use App\Kernel\Session\Session;
 use App\Kernel\Session\SessionInterface;
+use App\Kernel\Storage\Storage;
+use App\Kernel\Storage\StorageInterface;
 use App\Kernel\Validator\ValadatorInterface;
 use App\Kernel\Validator\Validator;
 use App\Kernel\View\View;
@@ -36,6 +38,8 @@ class Container // инициализация классов из services от�
     public readonly DataBaseInterface $dataBase;
     public readonly AuthInterface $auth;
 
+    public readonly StorageInterface $storage;
+
 
 
     public function __construct()
@@ -54,6 +58,7 @@ class Container // инициализация классов из services от�
         $this->dataBase = new DataBase($this->config);
         $this->auth = new Auth($this->dataBase, $this->session, $this->config);
         $this->view = new View($this->session,$this->auth); // -> в контроллер -> в нужный контроллер = сетим страницу которую открыть
+        $this->storage = new Storage($this->config);
         $this->router = new Router(
             $this->view,
             $this->request,
@@ -61,8 +66,8 @@ class Container // инициализация классов из services от�
             $this->session,
             $this->dataBase,
             $this->auth,
+            $this->storage
         ); //в конструктор роутера передаю значения какую страницу открывается и глобальные методы
-
 
     }
 

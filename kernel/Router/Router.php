@@ -10,6 +10,8 @@ use App\Kernel\Controller\Controller;
 use App\Kernel\DataBase\DataBaseInterface;
 use App\Kernel\Miidleware\AbstractMiddleware;
 use App\Kernel\Session\SessionInterface;
+use App\Kernel\Storage\Storage;
+use App\Kernel\Storage\StorageInterface;
 use App\Kernel\View\ViewInterface;
 
 
@@ -23,6 +25,7 @@ class Router implements RouterInterface
         private SessionInterface $session,
         private DataBaseInterface $dataBase,
         private AuthInterface $auth,
+        private StorageInterface $storage,
 
     )
     {
@@ -68,6 +71,7 @@ class Router implements RouterInterface
             $controller->setSession($this->session);
             $controller->setDataBase($this->dataBase);
             $controller->setAuth($this->auth);
+            $controller->setStorage($this->storage);
 
             call_user_func([$controller,$action]);
         }

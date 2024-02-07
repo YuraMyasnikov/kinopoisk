@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Kernel\Storage\Storage;
+use App\Kernel\Storage\StorageInterface;
 use App\Kernel\Upload\UploadedFile;
 use App\Kernel\Upload\UploadedFileInterface;
 use App\Kernel\Validator\ValadatorInterface;
@@ -79,6 +81,11 @@ class Request implements RequestInterface// Запрашивает (строка
             $this->files[$key]['error'],
             $this->files[$key]['tmp_name'],
         );
+    }
+
+    public function storage(): StorageInterface
+    {
+        return new Storage('http://kinopoisk');
     }
 
     public function setValidator(ValadatorInterface $validator): void

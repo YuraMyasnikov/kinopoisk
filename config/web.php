@@ -16,7 +16,6 @@ return [
     // добавление фильма
     Route::get('/admin/movie/add', [MovieController::class,'addFormView'], [AuthMiddleware::class]),
     Route::post('/admin/movie/add', [MovieController::class,'addMovie']),
-
     //регистрация
     Route::get("/register", [RegisterController::class, 'index'],[GuestMiddleware::class]),
     Route::post("/register", [RegisterController::class, 'register']),
@@ -25,6 +24,8 @@ return [
     Route::get("/login", [LoginController::class, 'index'],[GuestMiddleware::class]),
     Route::post("/login", [LoginController::class, 'login']),
     Route::post("/logout", [LoginController::class, 'logout']),
+
+
 
 
 

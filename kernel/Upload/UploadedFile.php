@@ -32,7 +32,7 @@ class UploadedFile implements UploadedFileInterface
 
         if (move_uploaded_file($this->tmpName, $filePath)) //откуда и до хранении сущности
         {
-            return "storage/$dirName/$fileName";
+            return "$dirName/$fileName";
         };
 
         return false;

@@ -6,7 +6,6 @@ namespace App\Kernel\View;
 
 use App\Kernel\Auth\AuthInterface;
 use App\Kernel\Exections\ViewNotFoundExection;
-use App\Kernel\Session\Session;
 use App\Kernel\Session\SessionInterface;
 
 class View implements ViewInterface
@@ -16,7 +15,7 @@ class View implements ViewInterface
         private AuthInterface $auth
     ){}
 
-    public function page ($name): void
+    public function page ($name, array $data = []): void
     {
         $viewPath = MAIN_PATH . "/view/pages/$name.php";
 
@@ -25,7 +24,7 @@ class View implements ViewInterface
             throw new ViewNotFoundExection("Братан такой страницы \"$name\" не существует "); //ошибка на случай если с контроллера отправка на несуществующую страницу
         }
 
-        extract(array: $this->defaultData()); // передаю в вьюху объекты классов
+        extract(array: array_merge($this->defaultData(), ['data' => $data])); // передаю в вьюху объекты классов
 
         include_once $viewPath;
     }

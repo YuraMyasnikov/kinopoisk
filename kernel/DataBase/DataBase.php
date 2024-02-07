@@ -44,6 +44,16 @@ class DataBase implements DataBaseInterface
 
     }
 
+    public function list(string $table): ?array
+    {
+        $sql = "SELECT * FROM $table";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        return $result;
+    }
+
+
     public function first(string $table, array $conditions = []): ?array
     {
         $where = '';
